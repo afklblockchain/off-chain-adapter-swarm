@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+.node-*
+
+# Dependency directories
+node_modules
+
+.DS_Store
+.history
+
+# Generated artifacts
+dist
+coverage
+.nyc_output
+.nyc_coverage
