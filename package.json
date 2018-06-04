@@ -6,7 +6,7 @@
   "scripts": {
     "flow": "flow",
     "lint": "eslint src test",
-    "test": "rimraf .nyc_output .nyc_coverage && nyc --clean=false --reporter=text mocha \"test/**/*.spec.js\" --timeout 20000 --require babel-register --require babel-polyfill",
+    "test": "rimraf .nyc_output .nyc_coverage && ./test/scripts/localswarm.sh && nyc --clean=false --reporter=text mocha \"test/**/*.spec.js\" --timeout 20000 --require babel-register --require babel-polyfill && killall swarm",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rimraf dist && rimraf docs",
     "build": "webpack --config webpack.config.js --mode production",
