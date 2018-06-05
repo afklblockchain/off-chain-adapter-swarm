@@ -24,7 +24,7 @@ const libs = WTLibs.createInstance({
   },
   offChainDataOptions: {
     accessors: {
-      json: {
+      'bzz-raw': {
         options: {
           swarmProviderUrl: 'http://localhost:8500',
         }
