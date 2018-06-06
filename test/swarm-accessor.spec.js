@@ -30,9 +30,9 @@ describe('off-chain-data-accessor-swarm.SwarmAccessor', () => {
     });
 
     // TODO: Solve this somehow.
-    /* it('should return null if nothing was previously saved', async () => {
+    /* it('should return undefined if nothing was previously saved', async () => {
       let data = await accessor.download('bzz-raw://invalid-hash');
-      assert.equal(data, null);
+      assert.equal(data, undefined);
     }); */
 
     it('should fail if the url is ill-formed', async () => {
