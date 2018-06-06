@@ -15,3 +15,6 @@ dist
 coverage
 .nyc_output
 .nyc_coverage
+
+# Test swarm binary and data.
+swarm_data
