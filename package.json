@@ -1,6 +1,6 @@
 {
   "name": "@windingtree/off-chain-adapter-swarm",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Swarm-based storage that can be used as an off-chain data adapter in @windingtree/wt-js-libs",
   "main": "dist/node/index.js",
   "scripts": {
