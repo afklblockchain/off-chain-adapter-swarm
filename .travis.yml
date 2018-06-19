@@ -23,7 +23,7 @@ jobs:
       skip_cleanup: true
       api_key: "$NPM_TOKEN"
       on:
-        repo: windingtree/off-chain-accessor-swarm
+        repo: windingtree/off-chain-adapter-swarm
         tags: true
 env:
   global:
