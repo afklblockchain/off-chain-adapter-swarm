@@ -3,9 +3,9 @@
 import Web3Bzz from 'web3-bzz';
 
 /**
- * Off-chain data accessor based on Ethereum Swarm.
+ * Off-chain data adapter based on Ethereum Swarm.
  */
-class SwarmAccessor {
+class SwarmAdapter {
   buzz: Web3Bzz;
 
   constructor (options: {| swarmProviderUrl: string |}) {
@@ -49,7 +49,7 @@ class SwarmAccessor {
   async download (url: string): Promise<?Object> {
     let hash = this._getHash(url),
       dataRaw = await this.buzz.download(hash);
-    return SwarmAccessor._deserialize(dataRaw);
+    return SwarmAdapter._deserialize(dataRaw);
   }
 
   /**
@@ -57,7 +57,7 @@ class SwarmAccessor {
    * @return {string} Resulting url such as `bzz-raw://<hash>`
    */
   async upload (data: Object): Promise<string> {
-    let dataRaw = SwarmAccessor._serialize(data),
+    let dataRaw = SwarmAdapter._serialize(data),
       hash = await this.buzz.upload(dataRaw);
     return `bzz-raw://${hash}`;
   }
@@ -70,4 +70,4 @@ class SwarmAccessor {
   }
 }
 
-export default SwarmAccessor;
+export default SwarmAdapter;

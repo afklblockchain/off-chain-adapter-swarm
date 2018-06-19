@@ -1,5 +1,5 @@
-import SwarmAccessor from './swarm-accessor';
+import SwarmAdapter from './swarm-adapter';
 
 export default {
-  accessor: SwarmAccessor,
+  adapter: SwarmAdapter,
 };

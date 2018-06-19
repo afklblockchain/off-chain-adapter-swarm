@@ -2,16 +2,16 @@
 
 ### Table of Contents
 
--   [SwarmAccessor][1]
+-   [SwarmAdapter][1]
     -   [download][2]
     -   [upload][3]
     -   [update][4]
     -   [\_serialize][5]
     -   [\_deserialize][6]
 
-## SwarmAccessor
+## SwarmAdapter
 
-Off-chain data accessor based on Ethereum Swarm.
+Off-chain data adapter based on Ethereum Swarm.
 
 **Parameters**
 
@@ -71,7 +71,7 @@ Deserialize the data obtained from swarm.
 
 Returns **[Object][10]** Resulting object.
 
-[1]: #swarmaccessor
+[1]: #swarmadapter
 
 [2]: #download
 
