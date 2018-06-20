@@ -13,7 +13,7 @@ class SwarmAdapter {
   }
 
   static _getHash (url: string): string {
-    const matchResult = url.match(/^([a-zA-Z-]+):\/\/(.+)/i);
+    const matchResult = url.match(/^([a-zA-Z-]+):\/\/([a-zA-Z0-9]+)\/?/i);
     if (!matchResult || matchResult.length < 2) {
       throw new Error(`Invalid url: ${url}`);
     }

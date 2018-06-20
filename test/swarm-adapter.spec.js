@@ -29,6 +29,12 @@ describe('off-chain-data-adapter-swarm.SwarmAdapter', () => {
       assert.deepEqual(data, { key2: 'diacřitićs and странные символы' });
     });
 
+    it('should work well with trailing slashes', async () => {
+      let url = await adapter.upload({ key2: 'value2' }),
+        data = await adapter.download(`${url}/`);
+      assert.deepEqual(data, { key2: 'value2' });
+    });
+
     it('should fail when the hash is non-existent', async () => {
       try {
         await adapter.download('bzz-raw://invalid-hash');
