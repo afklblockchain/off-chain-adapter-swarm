@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import SwarmAdapter from '../src/swarm-adapter';
+import SwarmAdapter from '../src/index';
 
 // This needs to be setup before running the tests externally; see:
 //
