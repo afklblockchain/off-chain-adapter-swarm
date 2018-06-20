@@ -1,18 +1,18 @@
 // @flow
 
-import Web3Bzz from 'web3-bzz';
+import request from 'xhr-request';
 
 /**
  * Off-chain data adapter based on Ethereum Swarm.
  */
 class SwarmAdapter {
-  buzz: Web3Bzz;
+  swarmProviderUrl: string;
 
   constructor (options: {| swarmProviderUrl: string |}) {
-    this.buzz = new Web3Bzz(options.swarmProviderUrl);
+    this.swarmProviderUrl = options.swarmProviderUrl;
   }
 
-  _getHash (url: string): string {
+  static _getHash (url: string): string {
     const matchResult = url.match(/^([a-zA-Z-]+):\/\/(.+)/i);
     if (!matchResult || matchResult.length < 2) {
       throw new Error(`Invalid url: ${url}`);
@@ -24,32 +24,21 @@ class SwarmAdapter {
   }
 
   /**
-   * Serialize the input data to JSON before upload.
-   * @return {string} Resulting JSON.
-   */
-  static _serialize (data: Object): string {
-    return JSON.stringify(data);
-  }
-
-  /**
-   * Deserialize the data obtained from swarm.
-   * @return {Object} Resulting object.
-   */
-  static _deserialize (data: Uint8Array): Object {
-    // Convert data from Uint8Array to UTF-8 and parse as JSON.
-    let encodedString = String.fromCharCode.apply(null, data),
-      decodedString = decodeURIComponent(escape(encodedString));
-    return JSON.parse(decodedString);
-  }
-
-  /**
    * Retrieves data stored under a hash derived from url `bzz-raw://<hash>`
    * @throws {Error} When hash cannot be detected.
    */
-  async download (url: string): Promise<?Object> {
-    let hash = this._getHash(url),
-      dataRaw = await this.buzz.download(hash);
-    return SwarmAdapter._deserialize(dataRaw);
+  async download (bzzUrl: string): Promise<?Object> {
+    let hash = SwarmAdapter._getHash(bzzUrl);
+    return new Promise((resolve, reject) => {
+      request(`${this.swarmProviderUrl}/bzz-raw:/${hash}`, {}, (err, data, response) => {
+        if (err) {
+          return reject(err);
+        } else if (response.statusCode >= 400) {
+          return reject(new Error(`Error ${response.statusCode}.`));
+        }
+        return resolve(JSON.parse(data));
+      });
+    });
   }
 
   /**
@@ -57,9 +46,21 @@ class SwarmAdapter {
    * @return {string} Resulting url such as `bzz-raw://<hash>`
    */
   async upload (data: Object): Promise<string> {
-    let dataRaw = SwarmAdapter._serialize(data),
-      hash = await this.buzz.upload(dataRaw);
-    return `bzz-raw://${hash}`;
+    let url = `${this.swarmProviderUrl}/bzz-raw:/`;
+    let params = {
+      body: JSON.stringify(data),
+      method: 'POST',
+    };
+    return new Promise((resolve, reject) => {
+      request(url, params, (err, data, response) => {
+        if (err) {
+          return reject(err);
+        } else if (response.statusCode >= 400) {
+          return reject(new Error(`Error ${response.statusCode}.`));
+        }
+        return resolve(`bzz-raw://${data}`);
+      });
+    });
   }
   
   /**

@@ -29,24 +29,31 @@ describe('off-chain-data-adapter-swarm.SwarmAdapter', () => {
       assert.deepEqual(data, { key2: 'diacřitićs and странные символы' });
     });
 
-    // TODO: Solve this somehow.
-    /* it('should return undefined if nothing was previously saved', async () => {
-      let data = await adapter.download('bzz-raw://invalid-hash');
-      assert.equal(data, undefined);
-    }); */
+    it('should fail when the hash is non-existent', async () => {
+      try {
+        await adapter.download('bzz-raw://invalid-hash');
+        throw new Error('Should have thrown an error');
+      } catch (e) {
+        assert.include(e.message, 'Error 404');
+      }
+    });
 
     it('should fail if the url is ill-formed', async () => {
       try {
         await adapter.download('ajasdlkchjhh');
         throw new Error('Should have thrown an error');
-      } catch (e) {}
+      } catch (e) {
+        assert.include(e.message, 'Invalid url');
+      }
     });
 
     it('should fail if the url scheme does not match expectations', async () => {
       try {
         await adapter.download('whatever://ajasdlkchjhh');
         throw new Error('Should have thrown an error');
-      } catch (e) {}
+      } catch (e) {
+        assert.include(e.message, 'Invalid url scheme');
+      }
     });
   });
 
