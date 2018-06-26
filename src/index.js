@@ -3,13 +3,22 @@
 import request from 'xhr-request';
 
 /**
+ */
+type CacheType = {
+  set: (hash: string, dataJson: string) => Promise<void>,
+  get: (hash: string) => Promise<string>
+};
+
+/**
  * Off-chain data adapter based on Ethereum Swarm.
  */
 class SwarmAdapter {
   swarmProviderUrl: string;
+  cache: ?CacheType;
 
-  constructor (options: {| swarmProviderUrl: string |}) {
+  constructor (options: {| swarmProviderUrl: string, cache?: CacheType |}) {
     this.swarmProviderUrl = options.swarmProviderUrl;
+    this.cache = options.cache;
   }
 
   static _getHash (url: string): string {
@@ -29,14 +38,23 @@ class SwarmAdapter {
    */
   async download (bzzUrl: string): Promise<?Object> {
     let hash = SwarmAdapter._getHash(bzzUrl);
+    if (this.cache) {
+      let dataJson = await this.cache.get(hash);
+      if (dataJson) {
+        return JSON.parse(dataJson);
+      }
+    }
     return new Promise((resolve, reject) => {
-      request(`${this.swarmProviderUrl}/bzz-raw:/${hash}`, {}, (err, data, response) => {
+      request(`${this.swarmProviderUrl}/bzz-raw:/${hash}`, {}, (err, dataJson, response) => {
         if (err) {
           return reject(err);
         } else if (response.statusCode >= 400) {
           return reject(new Error(`Error ${response.statusCode}.`));
         }
-        return resolve(JSON.parse(data));
+        if (this.cache) {
+          this.cache.set(hash, dataJson); // No need to block here.
+        }
+        return resolve(JSON.parse(dataJson));
       });
     });
   }
@@ -47,18 +65,22 @@ class SwarmAdapter {
    */
   async upload (data: Object): Promise<string> {
     let url = `${this.swarmProviderUrl}/bzz-raw:/`;
+    let dataJson = JSON.stringify(data);
     let params = {
-      body: JSON.stringify(data),
+      body: dataJson,
       method: 'POST',
     };
     return new Promise((resolve, reject) => {
-      request(url, params, (err, data, response) => {
+      request(url, params, (err, hash, response) => {
         if (err) {
           return reject(err);
         } else if (response.statusCode >= 400) {
           return reject(new Error(`Error ${response.statusCode}.`));
         }
-        return resolve(`bzz-raw://${data}`);
+        if (this.cache) {
+          this.cache.set(hash, dataJson); // No need to block here.
+        }
+        return resolve(`bzz-raw://${hash}`);
       });
     });
   }

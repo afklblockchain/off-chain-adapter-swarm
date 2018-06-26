@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import sinon from 'sinon';
 import SwarmAdapter from '../src/index';
 
 // This needs to be setup before running the tests externally; see:
@@ -8,11 +9,29 @@ const SWARM_PROVIDER_URL = 'http://localhost:8500';
 
 describe('off-chain-data-adapter-swarm.SwarmAdapter', () => {
   const adapter = new SwarmAdapter({ swarmProviderUrl: SWARM_PROVIDER_URL });
+  const _cache = {};
+  const cache = {
+    set: sinon.stub().callsFake((hash, data) => {
+      _cache[hash] = data;
+    }),
+    get: sinon.stub().callsFake((hash) => _cache[hash]),
+  };
+  const cachedAdapter = new SwarmAdapter({
+    swarmProviderUrl: SWARM_PROVIDER_URL,
+    cache: cache,
+  });
 
   describe('upload', () => {
     it('should return a url of stored data', async () => {
       let url = await adapter.upload({ key: 'value' });
       assert.match(url, /bzz-raw:\/\/.+/);
+    });
+
+    it('should store the uploaded data in cache if provided', async () => {
+      cache.set.resetHistory();
+      await cachedAdapter.upload({ key: 'value' });
+      assert.equal(cache.set.callCount, 1);
+      assert.equal(cache.set.args[0][1], [JSON.stringify({ key: 'value' })]);
     });
   });
 
@@ -60,6 +79,19 @@ describe('off-chain-data-adapter-swarm.SwarmAdapter', () => {
       } catch (e) {
         assert.include(e.message, 'Invalid url scheme');
       }
+    });
+
+    it('should utilize the cache if provided', async () => {
+      // Use the non-cached adapter to avoid cache upon upload.
+      let url = await adapter.upload({ key: 'value3' });
+      cache.get.resetHistory();
+      cache.set.resetHistory();
+      await cachedAdapter.download(`${url}/`);
+      assert.equal(cache.get.callCount, 1);
+      assert.equal(cache.set.callCount, 1);
+      await cachedAdapter.download(`${url}/`);
+      assert.equal(cache.get.callCount, 2);
+      assert.equal(cache.set.callCount, 1);
     });
   });
 
