@@ -36,3 +36,38 @@ const libs = WTLibs.createInstance({
   },
 });
 ```
+
+Optionally, you can provide a caching backend for the adapter to
+avoid repeated requests. (Note: in this example, cache
+expiration is not specified as bzz-raw resources are immutable.)
+
+```javascript
+
+import bluebird from 'bluebird';
+import redis from 'redis';
+bluebird.promisifyAll(redis.RedisClient.prototype);
+
+const redisClient = redis.createClient();
+
+const libs = WTLibs.createInstance({
+  dataModelOptions: {
+    provider: 'http://localhost:8545',
+  },
+  offChainDataOptions: {
+    adapters: {
+      'bzz-raw': {
+        options: {
+          swarmProviderUrl: 'http://localhost:8500',
+          cache: {
+            set: (hash, dataJson) => redisClient.setAsync(hash, dataJson);
+            get: (hash) => redisClient.getAsync(hash);
+          }
+        }
+        create: (options) => {
+          return new SwarmAdapter(options);
+        },
+      },
+    },
+  },
+});
+```

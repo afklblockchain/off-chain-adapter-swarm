@@ -2,12 +2,20 @@
 
 ### Table of Contents
 
--   [SwarmAdapter][1]
-    -   [download][2]
-    -   [upload][3]
-    -   [update][4]
-    -   [\_serialize][5]
-    -   [\_deserialize][6]
+-   [CacheType][1]
+-   [SwarmAdapter][2]
+    -   [download][3]
+    -   [upload][4]
+    -   [update][5]
+
+## CacheType
+
+Type: {set: function (hash: [string][6], dataJson: [string][6]): [Promise][7]&lt;void>, get: function (hash: [string][6]): [Promise][7]&lt;[string][6]>}
+
+**Properties**
+
+-   `set` **function (hash: [string][6], dataJson: [string][6]): [Promise][7]&lt;void>** 
+-   `get` **function (hash: [string][6]): [Promise][7]&lt;[string][6]>** 
 
 ## SwarmAdapter
 
@@ -15,7 +23,7 @@ Off-chain data adapter based on Ethereum Swarm.
 
 **Parameters**
 
--   `options` **{swarmProviderUrl: [string][7]}** 
+-   `options` **{swarmProviderUrl: [string][6], cache: [CacheType][8]?}** 
 
 ### download
 
@@ -23,12 +31,12 @@ Retrieves data stored under a hash derived from url `bzz-raw://<hash>`
 
 **Parameters**
 
--   `url` **[string][7]** 
+-   `bzzUrl` **[string][6]** 
 
 
--   Throws **[Error][8]** When hash cannot be detected.
+-   Throws **[Error][9]** When hash cannot be detected.
 
-Returns **[Promise][9]&lt;[Object][10]?>** 
+Returns **[Promise][7]&lt;[Object][10]?>** 
 
 ### upload
 
@@ -38,7 +46,7 @@ Stores data in swarm.
 
 -   `data` **[Object][10]** 
 
-Returns **[string][7]** Resulting url such as `bzz-raw://<hash>`
+Returns **[string][6]** Resulting url such as `bzz-raw://<hash>`
 
 ### update
 
@@ -46,49 +54,27 @@ Swarm records are immutable.
 
 **Parameters**
 
--   `url` **[string][7]** 
+-   `url` **[string][6]** 
 -   `data` **[Object][10]** 
 
-Returns **[Promise][9]&lt;[string][7]>** 
+Returns **[Promise][7]&lt;[string][6]>** 
 
-### \_serialize
+[1]: #cachetype
 
-Serialize the input data to JSON before upload.
+[2]: #swarmadapter
 
-**Parameters**
+[3]: #download
 
--   `data` **[Object][10]** 
+[4]: #upload
 
-Returns **[string][7]** Resulting JSON.
+[5]: #update
 
-### \_deserialize
+[6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-Deserialize the data obtained from swarm.
+[7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-**Parameters**
+[8]: #cachetype
 
--   `data` **[Uint8Array][11]** 
-
-Returns **[Object][10]** Resulting object.
-
-[1]: #swarmadapter
-
-[2]: #download
-
-[3]: #upload
-
-[4]: #update
-
-[5]: #_serialize
-
-[6]: #_deserialize
-
-[7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-
-[8]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
-
-[9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
 
 [10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-
-[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
