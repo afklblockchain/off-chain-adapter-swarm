@@ -51,10 +51,16 @@ class SwarmAdapter {
         } else if (response.statusCode >= 400) {
           return reject(new Error(`Error ${response.statusCode}.`));
         }
-        if (this.cache) {
-          this.cache.set(hash, dataJson); // No need to block here.
+        try {
+          const parsedData = JSON.parse(dataJson);
+          // Cache only proper JSON data
+          if (this.cache) {
+            this.cache.set(hash, dataJson); // No need to block here.
+          }
+          return resolve(parsedData);
+        } catch (e) {
+          return reject(e);
         }
-        return resolve(JSON.parse(dataJson));
       });
     });
   }
