@@ -1,7 +1,18 @@
 {
   "presets": [
-    "env",
+    ["env", {
+      targets: {
+        "node": "10",
+        "browsers": ["last 2 versions"]
+      }
+    }],
     "flow"
   ],
-  "plugins": ["transform-object-rest-spread"]
+  "plugins": [
+    "transform-object-rest-spread",
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
+    }]
+  ]
 }
