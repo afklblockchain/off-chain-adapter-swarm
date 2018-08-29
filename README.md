@@ -1,5 +1,7 @@
 # Winding Tree Off Chain Data Adapter - Ethereum Swarm.
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/windingtree/off-chain-adapter-swarm.svg)](https://greenkeeper.io/)
+
 Swarm-based storage that can be used in Winding Tree [wt-js-libs](https://github.com/windingtree/wt-js-libs).
 
 ## Installation
