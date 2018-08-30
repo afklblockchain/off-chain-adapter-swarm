@@ -1,18 +1,25 @@
 {
   "presets": [
-    ["env", {
-      targets: {
-        "node": "10",
-        "browsers": ["last 2 versions"]
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "10",
+          "browsers": [
+            "last 2 versions"
+          ]
+        }
       }
-    }],
-    "flow"
+    ],
+    "@babel/preset-flow"
   ],
   "plugins": [
-    "transform-object-rest-spread",
-    ["transform-runtime", {
-      "polyfill": false,
-      "regenerator": true
-    }]
+    "@babel/plugin-proposal-object-rest-spread",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
   ]
 }
