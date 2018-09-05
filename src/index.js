@@ -17,7 +17,7 @@ class SwarmAdapter {
   cache: ?CacheType;
 
   constructor (options: {| swarmProviderUrl: string, cache?: CacheType |}) {
-    this.swarmProviderUrl = options.swarmProviderUrl;
+    this.swarmProviderUrl = options.swarmProviderUrl.replace(/\/+$/, '');
     this.cache = options.cache;
   }
 

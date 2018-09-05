@@ -21,6 +21,13 @@ describe('off-chain-data-adapter-swarm.SwarmAdapter', () => {
     cache: cache,
   });
 
+  describe('constructor', () => {
+    it('should normalize the swarm provider url', () => {
+      const adapter = new SwarmAdapter({ swarmProviderUrl: 'http://example-gateway.net/' });
+      assert.equal(adapter.swarmProviderUrl, 'http://example-gateway.net');
+    });
+  });
+
   describe('upload', () => {
     it('should return a url of stored data', async () => {
       let url = await adapter.upload({ key: 'value' });
