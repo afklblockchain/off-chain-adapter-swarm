@@ -16,11 +16,15 @@ class SwarmAdapter {
   swarmProviderUrl: string;
   cache: ?CacheType;
   timeout: ?number;
+  timeoutRead: ?number;
+  timeoutWrite: ?number;
 
-  constructor (options: {| swarmProviderUrl: string, cache?: CacheType, timeout?: number |}) {
+  constructor (options: {| swarmProviderUrl: string, cache?: CacheType, timeout?: number, timeoutRead?: number, timeoutWrite?: number |}) {
     this.swarmProviderUrl = options.swarmProviderUrl.replace(/\/+$/, '');
     this.cache = options.cache;
     this.timeout = options.timeout;
+    this.timeoutRead = options.timeoutRead;
+    this.timeoutWrite = options.timeoutWrite;
   }
 
   static _getHash (url: string): string {
@@ -48,7 +52,7 @@ class SwarmAdapter {
     }
     return new Promise((resolve, reject) => {
       request(`${this.swarmProviderUrl}/bzz-raw:/${hash}`, {
-        timeout: this.timeout,
+        timeout: this.timeoutRead || this.timeout,
       }, (err, dataJson, response) => {
         if (err) {
           return reject(err);
@@ -79,7 +83,7 @@ class SwarmAdapter {
     let params = {
       body: dataJson,
       method: 'POST',
-      timeout: this.timeout,
+      timeout: this.timeoutWrite || this.timeout,
     };
     return new Promise((resolve, reject) => {
       request(url, params, (err, hash, response) => {
