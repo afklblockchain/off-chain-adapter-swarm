@@ -15,10 +15,12 @@ type CacheType = {
 class SwarmAdapter {
   swarmProviderUrl: string;
   cache: ?CacheType;
+  timeout: ?number;
 
-  constructor (options: {| swarmProviderUrl: string, cache?: CacheType |}) {
+  constructor (options: {| swarmProviderUrl: string, cache?: CacheType, timeout?: number |}) {
     this.swarmProviderUrl = options.swarmProviderUrl.replace(/\/+$/, '');
     this.cache = options.cache;
+    this.timeout = options.timeout;
   }
 
   static _getHash (url: string): string {
@@ -45,7 +47,9 @@ class SwarmAdapter {
       }
     }
     return new Promise((resolve, reject) => {
-      request(`${this.swarmProviderUrl}/bzz-raw:/${hash}`, {}, (err, dataJson, response) => {
+      request(`${this.swarmProviderUrl}/bzz-raw:/${hash}`, {
+        timeout: this.timeout,
+      }, (err, dataJson, response) => {
         if (err) {
           return reject(err);
         } else if (response.statusCode >= 400) {
@@ -75,6 +79,7 @@ class SwarmAdapter {
     let params = {
       body: dataJson,
       method: 'POST',
+      timeout: this.timeout,
     };
     return new Promise((resolve, reject) => {
       request(url, params, (err, hash, response) => {

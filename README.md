@@ -73,3 +73,30 @@ const libs = WTLibs.createInstance({
   },
 });
 ```
+
+You can also optionally specify a timeout in milliseconds for communication
+with Swarm gateway:
+
+```javascript
+import WTLibs from '@windingtree/wt-js-libs';
+import SwarmAdapter from '@windingtree/off-chain-adapter-swarm';
+
+const libs = WTLibs.createInstance({
+  dataModelOptions: {
+    provider: 'http://localhost:8545',
+  },
+  offChainDataOptions: {
+    adapters: {
+      'bzz-raw': {
+        options: {
+          swarmProviderUrl: 'http://localhost:8500',
+          timeout: 2000,
+        }
+        create: (options) => {
+          return new SwarmAdapter(options);
+        },
+      },
+    },
+  },
+});
+```
