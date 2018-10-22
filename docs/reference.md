@@ -3,78 +3,95 @@
 ### Table of Contents
 
 -   [CacheType][1]
--   [SwarmAdapter][2]
-    -   [download][3]
-    -   [upload][4]
-    -   [update][5]
+    -   [Properties][2]
+-   [SwarmAdapter][3]
+    -   [Parameters][4]
+    -   [download][5]
+        -   [Parameters][6]
+    -   [upload][7]
+        -   [Parameters][8]
+    -   [update][9]
+        -   [Parameters][10]
 
 ## CacheType
 
-Type: {set: function (hash: [string][6], dataJson: [string][6]): [Promise][7]&lt;void>, get: function (hash: [string][6]): [Promise][7]&lt;[string][6]>}
+Type: {set: function (hash: [string][11], dataJson: [string][11]): [Promise][12]&lt;void>, get: function (hash: [string][11]): [Promise][12]&lt;[string][11]>}
 
-**Properties**
+### Properties
 
--   `set` **function (hash: [string][6], dataJson: [string][6]): [Promise][7]&lt;void>** 
--   `get` **function (hash: [string][6]): [Promise][7]&lt;[string][6]>** 
+-   `set` **function (hash: [string][11], dataJson: [string][11]): [Promise][12]&lt;void>** 
+-   `get` **function (hash: [string][11]): [Promise][12]&lt;[string][11]>** 
 
 ## SwarmAdapter
 
 Off-chain data adapter based on Ethereum Swarm.
 
-**Parameters**
+### Parameters
 
--   `options` **{swarmProviderUrl: [string][6], cache: [CacheType][8]?}** 
+-   `options` **{swarmProviderUrl: [string][11], cache: [CacheType][13]?, timeout: [number][14]?, timeoutRead: [number][14]?, timeoutWrite: [number][14]?}** 
 
 ### download
 
 Retrieves data stored under a hash derived from url `bzz-raw://<hash>`
 
-**Parameters**
+#### Parameters
 
--   `bzzUrl` **[string][6]** 
+-   `bzzUrl` **[string][11]** 
 
 
--   Throws **[Error][9]** When hash cannot be detected.
+-   Throws **[Error][15]** When hash cannot be detected.
 
-Returns **[Promise][7]&lt;[Object][10]?>** 
+Returns **[Promise][12]&lt;[Object][16]?>** 
 
 ### upload
 
 Stores data in swarm.
 
-**Parameters**
+#### Parameters
 
--   `data` **[Object][10]** 
+-   `data` **[Object][16]** 
 
-Returns **[string][6]** Resulting url such as `bzz-raw://<hash>`
+Returns **[string][11]** Resulting url such as `bzz-raw://<hash>`
 
 ### update
 
 Swarm records are immutable.
 
-**Parameters**
+#### Parameters
 
--   `url` **[string][6]** 
--   `data` **[Object][10]** 
+-   `url` **[string][11]** 
+-   `data` **[Object][16]** 
 
-Returns **[Promise][7]&lt;[string][6]>** 
+Returns **[Promise][12]&lt;[string][11]>** 
 
 [1]: #cachetype
 
-[2]: #swarmadapter
+[2]: #properties
 
-[3]: #download
+[3]: #swarmadapter
 
-[4]: #upload
+[4]: #parameters
 
-[5]: #update
+[5]: #download
 
-[6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[6]: #parameters-1
 
-[7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[7]: #upload
 
-[8]: #cachetype
+[8]: #parameters-2
 
-[9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
+[9]: #update
 
-[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[10]: #parameters-3
+
+[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+[13]: #cachetype
+
+[14]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error
+
+[16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
